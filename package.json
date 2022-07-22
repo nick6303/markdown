@@ -8,8 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "pug-html-loader": "^1.1.5",
+    "vue": "^3.0.0",
+    "vue-router": "^4.1.2",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",
@@ -18,7 +24,12 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.35.2",
+    "sass-loader": "^10.1.1",
+    "element-plus": "^1.0.2-beta.54"
   },
   "eslintConfig": {
     "root": true,
