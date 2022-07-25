@@ -2,19 +2,11 @@ const isProduction = process.env.NODE_ENV === 'production'
 const Version = new Date().getTime()
 
 module.exports = {
-  // publicPath: isProduction ? '/2020nick/' : '/',
+  // publicPath: isProduction ? '/markdown/' : '/',
   publicPath: '/',
   devServer: {
     port: 8080,
     proxy: {
-      '/esapi/': {
-        target: 'https://10.11.233.101:9200/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/esapi': '',
-        },
-      },
       '/esmanageapi/': {
         target: 'http://10.11.233.213:8000/',
         ws: true,
@@ -23,84 +15,12 @@ module.exports = {
           '^/esmanageapi/': '',
         },
       },
-      '/esdynamic/': {
-        target: 'http://10.40.192.210:8080/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/esdynamic/': '',
-        },
-      },
-      '/scanapi/': {
-        target: 'http://10.40.192.212:8000/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/scanapi/': '',
-        },
-      },
-      '/nmap/': {
-        target: 'http://10.40.192.210:9001/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/nmap/': '',
-        },
-      },
-      '/prometheusApi/': {
-        target: 'http://10.11.233.103:9090/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/prometheusApi/': '',
-        },
-      },
-      '/yml/': {
-        target: 'http://10.40.192.210:9091/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/yml/': '',
-        },
-      },
-      '/alertmanager/': {
-        target: 'http://10.11.233.103:9093/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/alertmanager/': '',
-        },
-      },
-      '/filter/': {
-        target: 'http://10.40.192.210:8100/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/filter/': '',
-        },
-      },
-      '/fileapi/': {
-        target: 'http://10.40.192.210:8200/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/fileapi/': '',
-        },
-      },
       '/mdapi/': {
         target: 'http://10.40.192.210:9091/',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
           '^/mdapi/': '',
-        },
-      },
-      '/projmanapi/': {
-        target: 'http://10.11.233.213:8000/',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/projmanapi/': '',
         },
       },
     },

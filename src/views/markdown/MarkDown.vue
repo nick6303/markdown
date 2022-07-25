@@ -1,26 +1,26 @@
 <template lang="pug">
 #MarkDown
   #left
-    //- Version(
-    //-   @reloadTree="reloadTreeStruct(true)"
-    //-   @reloadVersion="storeVersion()"
-    //- )
+    Version(
+      @reloadTree="reloadTreeStruct(true)"
+      @reloadVersion="storeVersion()"
+    )
     Tree(
       @reload="reload"
     )
   #right
     .op
-      //- BreadCrumb
-      //- Operator(
-      //-   :run="run"
-      //-   @reload="reload" 
-      //-   @download="run = true" 
-      //- )
-  //-   Previewer(mode="preview")
-  //- PdfFormat(
-  //-   :run="run"
-  //-   @downloadOver="run = false"
-  //- )
+      BreadCrumb
+      Operator(
+        :run="run"
+        @reload="reload" 
+        @download="run = true" 
+      )
+    Previewer(mode="preview")
+  PdfFormat(
+    :run="run"
+    @downloadOver="run = false"
+  )
 </template>
 
 <script>
@@ -38,10 +38,10 @@ import {
 //comp
 
 import Tree from '@c/Tree'
-// import { Version, BreadCrumb } from '@/app/MarkDown/components/Shared'
-// import PdfFormat from '@/app/MarkDown/components/PDF'
-// import Operator from '@/app/MarkDown/components/Operator'
-// import Previewer from '@/app/MarkDown/components/Previewer'
+import { Version, BreadCrumb } from '@c/Shared'
+import PdfFormat from '@c/PDF'
+import Operator from '@c/Operator'
+import Previewer from '@c/Previewer'
 
 import router from '@/router'
 
@@ -49,11 +49,11 @@ export default defineComponent({
   name: 'MarkDown',
   components: {
     Tree,
-    // Operator,
-    // Previewer,
-    // PdfFormat,
-    // Version,
-    // BreadCrumb,
+    Operator,
+    Previewer,
+    PdfFormat,
+    Version,
+    BreadCrumb,
   },
   setup() {
     const store = useStore()
@@ -195,23 +195,28 @@ export default defineComponent({
   width: 100%
   height: 100%
   display: flex
+  position: relative
+  padding: 5px 10px
   #left
     +size(360px,100%)
     box-shadow: inset -2px -5px 3px 3px rgb(0 0 0 / 26%), inset 2px 1px 3px 3px #ffffff
     border-radius: 5px
     background: var(--tree_BG)
-    :deep(#Version )
+    position: relative
+    :deep(#Version)
       height: 140px
     :deep(#Tree)
-      height: calc(100% - 140px)
+      +size(100%,calc(100% - 140px))
   #right
     +size(calc(100% - 360px),100%)
     margin-left: 1%
+    position: relative
     .op
       display: flex
       height: 55px
       width: 100%
       align-items: center
+      position: relative
     :deep(#Previewer)
       height: calc(100% - 55px)
   /*捲軸*/
@@ -226,5 +231,7 @@ export default defineComponent({
     background: #fff
   :deep(#PdfFormat)
     position: absolute
+    top: 100%
+    left: 100%
     z-index: -999
 </style>

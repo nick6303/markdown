@@ -2,6 +2,7 @@
 #Tree
   #tags
     el-tooltip(
+      v-if="ShowBtns.create"
       effect="dark" content="新增資料夾" :hide-after="50" 
     )  
       el-button(
@@ -11,6 +12,7 @@
         @click="addDir"
       ) 
     el-tooltip(
+      v-if="ShowBtns.update"
       effect="dark"
       :hide-after="50"
     )  
@@ -23,42 +25,45 @@
         :class="draggable ? 'checked' : ''"
         @click="onChange"
       ) 
-  el-tree(
-    v-loading="tree_load"
-    node-key="id"
-    :default-expanded-keys="expendKey"
-    :data="TreeData" 
-    :props="{ children: 'children', label: 'name' }" 
-    @node-click="handleNodeClick"
-    :draggable="draggable"
-    @node-drag-end="handleDragEnd"
-    :allow-drop="AllowDrop"
-    @node-drag-enter="dragEnter"
-  )
-    template(#default="{ node, data }")
-      .mytree-node(
-        :class="getNodeClass(data)"
-      )
-        .basic(:style="{ background: node.data.id === dragNode ? 'beige' : '' }")
-          i(:class="data.type==='directory' ? 'el-icon-folder' : 'el-icon-document'")
-          span(:class="data.type === 'directory' ? 'dir': 'md' ") {{data.name}}
-        .btns(v-if="!draggable && data.id !==1 && data.type === 'directory'")
-          el-button.editbtn( 
-            icon="el-icon-edit" 
-            type="warning" plain
-            @click="openRenameFolder"
-          )   
-          el-button.delebtn( 
-            icon="el-icon-delete" 
-            type="danger" plain
-            @click="deleDir"
-          )    
+  el-scrollbar
+    el-tree(
+      v-loading="tree_load"
+      node-key="id"
+      :default-expanded-keys="expendKey"
+      :data="TreeData" 
+      :props="{ children: 'children', label: 'name' }" 
+      @node-click="handleNodeClick"
+      :draggable="draggable"
+      @node-drag-end="handleDragEnd"
+      :allow-drop="AllowDrop"
+      @node-drag-enter="dragEnter"
+    )
+      template(#default="{ node, data }")
+        .mytree-node(
+          :class="getNodeClass(data)"
+        )
+          .basic(:style="{ background: node.data.id === dragNode ? 'beige' : '' }")
+            i(:class="data.type==='directory' ? 'el-icon-folder' : 'el-icon-document'")
+            span(:class="data.type === 'directory' ? 'dir': 'md' ") {{data.name}}
+          .btns(v-if="!draggable && data.id !==1 && data.type === 'directory'")
+            el-button.editbtn( 
+              v-if="ShowBtns.update"
+              icon="el-icon-edit" 
+              type="warning" plain
+              @click="openRenameFolder"
+            )   
+            el-button.delebtn( 
+              v-if="ShowBtns.delete"
+              icon="el-icon-delete" 
+              type="danger" plain
+              @click="deleDir"
+            )    
   RenameFolder(@reload="emitReload")
   NewFolder(@reload="emitReload" )
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed } from 'vue'
+import { defineComponent, ref, watch, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import folderapi from '@api/folder'
 import { readMd, storeRencntInfo } from '@/utils/hooks'
@@ -83,6 +88,7 @@ export default defineComponent({
     const currentKey = ref()
     const dragNode = ref(0)
     const draggable = ref(false)
+    const ShowBtns = ref({})
     const removeTable = ref({
       source_id: -1,
       destination_id: -1,
@@ -209,6 +215,10 @@ export default defineComponent({
       emit('reload', obj)
     }
 
+    const openRenameFolder = () => {
+      store.dispatch('panels/openDialog', { type: 'renameFolder' })
+    }
+
     //發現點擊其他目錄時(目錄有異動)
     watch(
       () => store.state.file.recentFile,
@@ -224,9 +234,10 @@ export default defineComponent({
       }
     )
 
-    const openRenameFolder = () => {
-      store.dispatch('panels/openDialog', { type: 'renameFolder' })
-    }
+    onMounted(() => {
+      // ShowBtns.value = router.currentRoute.value.meta.actions
+      ShowBtns.value = store.state.status.ShowBtns
+    })
 
     return {
       addDir,
@@ -249,6 +260,7 @@ export default defineComponent({
       TreeData,
       tree_load,
       getNodeClass,
+      ShowBtns,
     }
   },
 })
@@ -256,84 +268,88 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 #Tree
-  padding: 16px 16px 16px 8px
+  padding: 16px 5px 16px 8px
   overflow-y: auto
   overflow-x: hidden
-  width: 100%
-  height: 100%
   #tags
     display: flex
     justify-content: flex-end
+    padding: 0 16px
+    margin: 0 0 010px
     .checked
       background: #409EFF
       color: #ECF5FF
-:deep(.el-tree)
-  background: var(--tree_BG)
-  .el-tree-node
-    &:not(:last-child)
-      padding-bottom: 8px
-    &:first-child
-      padding-top: 8px
-  .el-tree-node:focus > .el-tree-node__content
-    background-color: none  !important
-  .el-tree-node:focus>.el-tree-node__content, .el-tree-node__content:hover
-    background-color: transparent !important
-  .el-tree-node__content>.el-tree-node__expand-icon
-    padding: 1px
-  .dir
-    font-weight: bold
-    font-size: 16px
-    color: #5a5a5a
-  .md
-    color: #3a3a3a
-    font-size: 12px
-  .shaky
-    animation: shake .5s alternate infinite
-  .mytree-node
-    +size(100%,100%)
-    border-radius: 10px
-    display: flex
-    align-items: center
-    justify-content: space-between
-    padding-left: 3px
-    &.normal:hover,&.chosen
-      background: #f5f7fa
-    .basic
+  :deep(.el-scrollbar)
+    height: calc(100% - 43px)
+  :deep(.el-tree)
+    background: transparent
+    padding: 0 11px 0 0
+    &>.el-tree-node
+      .el-tree-node
+        &:not(:last-child)
+          padding-bottom: 10px
+        &:first-child
+          padding-top: 10px
+      .el-tree-node:focus > .el-tree-node__content
+        background-color: none  !important
+      .el-tree-node:focus>.el-tree-node__content, .el-tree-node__content:hover
+        background-color: transparent !important
+      .el-tree-node__content>.el-tree-node__expand-icon
+        padding: 1px
+    .dir
+      font-weight: bold
+      font-size: 16px
+      color: #5a5a5a
+    .md
+      color: #3a3a3a
+      font-size: 14px
+    .shaky
+      animation: shake .5s alternate infinite
+    .mytree-node
+      +size(100%,100%)
+      border-radius: 10px
       display: flex
       align-items: center
-      margin: 3px 0
-      i
-        font-size: smaller
-        border-radius: 50%
-        padding: 0.35em
-      .el-icon-folder
-        background: #e4af51
-        box-shadow: inset -1px -1px 3px 0px #885400, inset 1px 1px 3px 0px #fadaa6
-        color: #fff
-        margin-right: 0.3em
-    .btns
-      margin-right: 0.3rem
-      .delebtn, .editbtn
-        padding: 0
-        border: none
-        background: transparent
-      .editbtn
-        color: #686868
-      .delebtn
-        color: #F56C6C
-      .delebtn:hover i
-        background: #F56C6C
-        color: #fff
-        border-radius: 5px
-        padding: 2px
-      .editbtn:hover i
-        background: #686868
-        color: #fff
-        border-radius: 5px
-        padding: 2px
-  .chosen span
-    color: #161938 !important
-    font-weight: 600
+      justify-content: space-between
+      padding-left: 3px
+      &.normal:hover,&.chosen
+        background: #f5f7fa
+      .basic
+        display: flex
+        align-items: center
+        margin: 3px 0
+        i
+          font-size: smaller
+          border-radius: 50%
+          padding: 0.35em
+        .el-icon-folder
+          background: #e4af51
+          box-shadow: inset -1px -1px 3px 0px #885400, inset 1px 1px 3px 0px #fadaa6
+          color: #fff
+          margin-right: 0.3em
+      .btns
+        margin-right: 0.3rem
+        .delebtn, .editbtn
+          padding: 0
+          border: none
+          background: transparent
+        .editbtn
+          color: #686868
+        .delebtn
+          color: #F56C6C
+        .delebtn:hover i
+          background: #F56C6C
+          color: #fff
+          border-radius: 5px
+          padding: 2px
+        .editbtn:hover i
+          background: #686868
+          color: #fff
+          border-radius: 5px
+          padding: 2px
+    .chosen span
+      color: #161938 !important
+      font-weight: 600
 
 @keyframes shake
   0%

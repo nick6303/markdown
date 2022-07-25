@@ -6,6 +6,11 @@ export const status = {
     content_status: '已儲存',
     usedVersion: '',
     ImgURl: '',
+    ShowBtns: {
+      update: true,
+      delete: true,
+      create: true,
+    },
   },
   mutations: {
     setStatus(state, NewStatus) {
