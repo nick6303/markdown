@@ -301,12 +301,12 @@ export default defineComponent({
 #Previewer
   z-index: 5
   height: 100%
-  border: 1px solid rgb(237, 237, 237)
 :deep(.vuepress-markdown-body)
-  background-color: rgba(255, 255, 255, 0.7)//#ededed
+  background-color: #fff
 :deep(.v-md-editor)
-  background-color: rgba(255, 255, 255, 0.7)//#ededed
+  background-color: #fff
   border-radius: 0 4px 4px 4px
+  border: 1px solid rgb(237, 237, 237)
   :deep(.caption)
     color: red
 :deep(.v-md-editor-preview)

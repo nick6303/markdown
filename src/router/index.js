@@ -2,14 +2,20 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    name: 'MarkDown',
-    component: () => import('@v/markdown'),
-  },
-  {
     path: '/login',
     name: 'Login',
     component: () => import('@v/login'),
+  },
+  {
+    path: '/',
+    name: 'MarkDown',
+    component: () => import('@v/markdown'),
+    children: [
+      {
+        path: '/:page',
+        name: 'Page',
+      },
+    ],
   },
 ]
 

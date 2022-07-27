@@ -1,5 +1,4 @@
 
-// font-family: 'icomoon'
 @font-face
   font-family: 'BebasNeue-Regular'
   src: url('~@fonts/BebasNeue/BebasNeue-Regular.ttf') format('truetype')
@@ -171,7 +170,6 @@ video
 body
   line-height: 1
   height: 100%
-  //text-rendering: optimizeLegibility
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   -moz-font-feature-settings: 'liga', 'kern'
@@ -474,24 +472,13 @@ p
     100%
       height: #{$height}px
 
-@-webkit-keyframes fadeInUp
-  from
-  opacity: 0
-  -webkit-transform: translateY(25%)
-  transform: translateY(25%)
-
-  to
-  opacity: 1
-  -webkit-transform: none
-  transform: none
-
 @keyframes fadeInUp
-  from
+  0%
     opacity: 0
     -webkit-transform: translateY(25%)
     transform: translateY(25%)
 
-  to
+  100%
     opacity: 1
     -webkit-transform: translate(0)
     transform: translate(0)
@@ -501,57 +488,32 @@ p
   animation-name: fadeInUp
   animation-duration: .8s
 
-@-webkit-keyframes fadeInUp100
-  from
-  opacity: 0
-  -webkit-transform: translateY(100%)
-  transform: translateY(100%)
-  to
-  opacity: 1
-  -webkit-transform: none
-  transform: none
-
 @keyframes fadeInUp100
-  from
+  0%
     opacity: 0
     -webkit-transform: translateY(100%)
     transform: translateY(100%)
-  to
+  100%
     opacity: 1
     -webkit-transform: translate(0)
     transform: translate(0)
 
-@-webkit-keyframes fadeIn
-  from
-  opacity: 0
-
-  to
-  opacity: 1
-
 @keyframes fadeIn
-  from
+  0%
     opacity: 0
-  to
+  100%
     opacity: 1
 
 .fadeIn
   -webkit-animation-name: fadeIn
   animation-name: fadeIn
 
-@-webkit-keyframes fadeInDown
-  from
-  opacity: 0
-  transform: translateY(-50%)
-  to
-  opacity: 1
-  transform: none
-
 @keyframes fadeInDown
-  from
+  0%
     opacity: 0
     transform: translateY(-50%)
 
-  to
+  100%
     opacity: 1
     transform: translateY(0%)
 
@@ -562,35 +524,21 @@ p
   animation-delay: .2s
   -webkit-animation-delay: .2s
 
-@-webkit-keyframes fadeOut
-  from
-  opacity: 1
-  to
-  opacity: 0
-
 @keyframes fadeOut
-  from
+  0%
     opacity: 1
-  to
+  100%
     opacity: 0
 
 .fadeOut
   -webkit-animation-name: fadeOut
   animation-name: fadeOut
 
-@-webkit-keyframes fadeOutUp
-  from
-  opacity: 1
-  transform: translateY(0%)
-  to
-  opacity: 0
-  transform: translateY(-50%)
-
 @keyframes fadeOutUp
-  from
+  0%
     opacity: 1
     transform: translateY(0%)
-  to
+  100%
     opacity: 0
     transform: translateY(-50%)
 
@@ -598,27 +546,19 @@ p
   -webkit-animation-name: fadeOutUp
   animation-name: fadeOutUp
 
-@-webkit-keyframes fadeOutLeft
-  from
-  opacity: 1
-  transform: translateX(0%)
-  to
-  opacity: 0
-  transform: translateX(-50%)
-
 @keyframes fadeOutLeft
-  from
+  0%
     opacity: 1
     transform: translateX(0%)
-  to
+  100%
     opacity: 0
     transform: translateX(-50%)
 
 @keyframes fadeOutDown
-  from
+  0%
     opacity: 1
     transform: translateY(0%)
-  to
+  100%
     opacity: 0
     transform: translateY(50%)
 
@@ -630,19 +570,11 @@ p
   -webkit-animation-name: fadeOutUp
   animation-name: fadeOutUp
 
-@-webkit-keyframes fadeOutRight
-  from 
-  opacity: 1
-  transform: translateX(0%)
-  to 
-  opacity: 0
-  transform: translateX(50%)
-
 @keyframes fadeOutRight
-  from
+  0%
     opacity: 1
     transform: translateX(0%)
-  to
+  100%
     opacity: 0
     transform: translateX(50%)
 
@@ -758,7 +690,7 @@ p
   animation-name: slideInRight
 
 @keyframes flipInX
-  from
+  0%
     transform: perspective(400px) rotate3d(1, 0, 0, 90deg)
     animation-timing-function: ease-in
     opacity: 0
@@ -771,12 +703,12 @@ p
   80%
     transform: perspective(400px) rotate3d(1, 0, 0, -5deg)
     opacity: 1
-  to
+  100%
     transform: perspective(400px)
     opacity: 1
 
 @keyframes flipInY
-  from
+  0%
     transform: perspective(400px) rotate3d(0, 1, 0, 90deg)
     animation-timing-function: ease-in
     opacity: 0
@@ -789,12 +721,12 @@ p
   80%
     transform: perspective(400px) rotate3d(0, 1, 0, -5deg)
     opacity: 1
-  to
+  100%
     transform: perspective(400px)
     opacity: 1
 
 @keyframes flipInXY
-  from
+  0%
     transform: perspective(400px) rotate3d(1, 1, 0, 90deg)
     animation-timing-function: ease-in
     opacity: 0
@@ -807,7 +739,7 @@ p
   80%
     transform: perspective(400px) rotate3d(1, 1, 0, -5deg)
     opacity: 1
-  to
+  100%
     transform: perspective(400px)
     opacity: 1
 
@@ -907,9 +839,10 @@ p
     opacity: 1
 
 @keyframes topUp
-  from, 20%, 53%, 80% 
-  animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000)
-  top: 0
+  0%, 20%, 53%, 80%
+    top: 0
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000)
+
   40%, 43%
     animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060)
     top: -15px
@@ -918,7 +851,7 @@ p
     top: -7.5px
   90%
     top: -2px
-  to
+  100%
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000)
     top: 0
 
