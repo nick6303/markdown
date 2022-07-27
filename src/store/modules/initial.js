@@ -5,7 +5,7 @@ export const initial = {
       Name: '',
       Tile: '',
     },
-    version: [],
+    versionList: [],
     struct: [],
   },
   mutations: {
@@ -13,8 +13,8 @@ export const initial = {
       state.title.Name = title.Name
       state.title.Tile = title.Tile
     },
-    setVersion(state, version) {
-      state.version = version
+    setVersionList(state, list) {
+      state.versionList = list
     },
     setStruct(state, struct) {
       state.struct = struct

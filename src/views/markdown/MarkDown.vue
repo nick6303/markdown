@@ -2,7 +2,7 @@
 #MarkDown
   #left
     Version(
-      @reloadTree="reloadTreeStruct(true)"
+      @reloadTreeStruct="reloadTreeStruct(true)"
       @reloadVersion="storeVersion"
     )
     Tree(
@@ -80,11 +80,11 @@ export default defineComponent({
         if (versionReload) {
           //切換版本
           versions.value = await basicapi.GetVersion()
+          store.commit('initial/setVersionList', versions.value)
           findFirstMd(struct.value[0].children, struct.value[0].id)
         }
         // struct.value = struct.value[0].children //根目錄不顯示在tree
         store.commit('initial/setStruct', struct.value) //
-        store.commit('initial/setVersion', versions.value) //
         return true
       } catch {
         return false
@@ -105,6 +105,7 @@ export default defineComponent({
 
     const storeVersion = async () => {
       const res = await basicapi.GetVersion()
+      store.commit('initial/setVersionList', res) //
       const URLs = routerPath.value.split('/')
       const VersionURL = URLs[URLs.length - 1]
       const index = res.findIndex(
@@ -113,34 +114,31 @@ export default defineComponent({
       if (index !== -1) {
         const ver = res[index]
         store.commit('status/setVersion', ver)
-        versions.value = [ver]
-        store.commit('initial/setVersion', versions.value) //
       } else {
         store.commit('status/setVersion', res[0])
       }
-      await reloadTreeStruct(true)
+      await reloadTreeStruct()
+      findFirstMd(struct.value[0].children, struct.value[0].id)
     }
 
     const byOrder = async () => {
       try {
-        //1. Get Title
         const res = await basicapi.GetTitle(1)
         const title = res.title ?? ''
         store.commit('initial/setTitle', title) //
-        //2. Get Versions
         storeVersion()
-        //3. Get Struct
       } catch {
         //
       }
     }
 
-    const reload = async ({ reloadtype, res, deleParent, findFirst }) => {
-      if (findFirst) {
-        await reloadTreeStruct(true)
-      } else {
-        await reloadTreeStruct()
-      }
+    const reload = async ({
+      reloadtype,
+      res,
+      deleParent,
+      findFirst = false,
+    }) => {
+      await reloadTreeStruct(findFirst)
 
       //檔案 新增/編輯、rename、刪除
       if (reloadtype == 'addFile') {
@@ -172,13 +170,11 @@ export default defineComponent({
     }
 
     watch(routerPath, () => {
-      byOrder()
+      storeVersion()
     })
 
     onMounted(() => {
-      if (store.state.initial.version.length === 0) {
-        byOrder() //文件相關載入
-      }
+      byOrder() //文件相關載入
     })
 
     return {

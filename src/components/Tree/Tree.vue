@@ -118,23 +118,21 @@ export default defineComponent({
       }
       removeTable.value.source_id = source.id
       removeTable.value.destination_id = dest.id
-      await folderapi
-        .Move(removeTable.value)
-        .then((res) => {
-          const selected = {
-            id: res.id,
-            type: source.type,
-            name: source.name,
-            path: res.path,
-          }
-          storeRencntInfo(selected)
-          emit('reload', {})
-        })
-        .catch(() => {
-          event.dcancelable = true
-          event.defaultPrevented = true
-          event.preventDefault()
-        })
+      try {
+        const res = await folderapi.Move(removeTable.value)
+        const selected = {
+          id: res.id,
+          type: source.type,
+          name: source.name,
+          path: res.path,
+        }
+        await storeRencntInfo(selected)
+        emit('reload', {})
+      } catch {
+        event.dcancelable = true
+        event.defaultPrevented = true
+        event.preventDefault()
+      }
     }
 
     const dragEnter = (node, dest) => {

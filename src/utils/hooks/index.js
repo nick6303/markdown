@@ -50,28 +50,15 @@ export const compare = (ori, newstr) => {
 
 //找此層第一個文件
 export const findFirstMd = async (list, rootID) => {
-  const find = ref(false)
-  try {
-    let select
-    for (let i = 0; i < list.length; i++) {
-      const element = list[i]
-      if (element.type === 'file') {
-        select = {
-          id: element.id,
-          type: element.type,
-          name: element.name,
-        }
-        await storeRencntInfo(select) //存入資訊
-        find.value = true
-        break
-      }
+  const target = list.find((item) => item.type === 'file')
+  if (target) {
+    const select = {
+      id: target.id,
+      type: target.type,
+      name: target.name,
     }
-    if (find.value) {
-      readMd(select.id)
-    } else {
-      NoFile(rootID)
-    }
-  } catch {
+    await storeRencntInfo(select) //存入資訊
+  } else {
     NoFile(rootID)
   }
 }
@@ -93,12 +80,20 @@ export const storeRencntInfo = async (select) => {
   let obj = select
   //1.收集-點擊的file/folder資訊
   if (obj.id) {
-    await mdapi.GetFile(obj.id).then((res) => {
+    try {
+      store.commit('loading/setViewLoad', true)
+
+      const res = await mdapi.GetFile(obj.id)
       obj.parent_id = res.parent_id
       obj.path = res.path
       obj.encoding = res.encoding
       obj.content = ImgProcessor(res.content, 'addHttp')
-    })
+    } catch {
+      NoFile()
+    } finally {
+      store.commit('loading/setViewLoad', false)
+    }
+
     var bread = obj.path.split('/') //收集  2.file的BreadCrumb
     if (bread[bread.length - 1].includes('.md'))
       bread[bread.length - 1] = bread[bread.length - 1].substring(

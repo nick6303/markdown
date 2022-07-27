@@ -3,57 +3,56 @@
   .top {{title.Name}}
   .bottom
     span.name {{title.Tile}}
-    el-select(
-      v-model="ver" 
-      popper-class='md-version-select'
-      @change="handleChange" 
+    el-dropdown(
+      trigger="click"
     )
-      el-option(
-        v-for="item in version"
-        :key="item"
-        :label="item"
-        :value="item"
-      )
-        span {{item}}
-        .btns
-          i.edit.el-icon-edit(
-            v-if="ShowBtns.update"
-            @click.stop="renameVersion(item)"
+      el-button(size="mini")
+        | {{usedVersion}}
+        i.el-icon-arrow-down.el-icon--right
+      template(#dropdown)
+        el-dropdown-menu
+          el-dropdown-item(
+            v-for="item in versionList"
+            :disabled="item === usedVersion"
           )
-          i.dele.el-icon-delete(
-            v-if="ShowBtns.delete"
-            @click.stop="deleVersion(item)"
-          )
-      el-option(
-        v-if="ShowBtns.create"
-        value=""
-      )
-        el-button.md-select-word(
-          type="primary" plain
-          icon="el-icon-plus"
-          @click="addVersion"
-          size="mini"
-        ) 新增
+            router-link(:to="`/${item}`") {{item}}
+            .btns
+              i.el-icon-edit(
+                v-if="ShowBtns.update"
+                @click.stop="renameVersion(item)"
+              )
+              i.el-icon-delete(
+                v-if="ShowBtns.delete"
+                @click.stop="deleVersion(item)"
+              )
+          el-dropdown-item(v-if="ShowBtns.create")
+            el-button.md-select-word(
+              type="primary" plain
+              icon="el-icon-plus"
+              @click="addVersion"
+              size="mini"
+            ) 新增
   NewAndRenameVersion(@reload="handleChange")
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import NewAndRenameVersion from './components/NewAndRenameVersion.vue'
 // import router from '@router'
 import { useStore } from 'vuex'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import versionApi from '@api/version'
+import router from '@/router'
 
 export default defineComponent({
   name: 'Version',
   components: {
     NewAndRenameVersion,
   },
-  emits: ['reloadTree', 'reloadVersion'],
+  emits: ['reloadTreeStruct', 'reloadVersion'],
   setup(props, { emit }) {
     const store = useStore()
-    const version = computed(() => store.state.initial.version)
+    const versionList = computed(() => store.state.initial.versionList)
     const title = computed(() => store.state.initial.title)
     const usedVersion = computed(() => store.state.status.usedVersion)
     const ver = ref(usedVersion.value)
@@ -61,8 +60,8 @@ export default defineComponent({
 
     const handleChange = async (val) => {
       if (val) {
-        await store.commit('status/setVersion', val)
-        emit('reloadTree')
+        router.push({ path: `/${val}` })
+        // emit('reloadTreeStruct')
       }
     }
 
@@ -71,43 +70,41 @@ export default defineComponent({
     }
 
     const deleVersion = async (name) => {
-      let msg = '將會刪除此資料夾'
-      ElMessageBox.confirm(msg, `確定刪除?`, {
-        confirmButtonText: '確認',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          //確定
-          runDel(name)
+      try {
+        await ElMessageBox.confirm('將會刪除此資料夾', `確定刪除?`, {
+          confirmButtonText: '確認',
+          cancelButtonText: '取消',
+          type: 'warning',
         })
-        .catch(() => {
-          //取消
-        })
+        //確定
+        runDel(name)
+      } catch {
+        // pass
+      }
     }
 
     const runDel = async (name) => {
-      await versionApi
-        .DeleVersion({
+      try {
+        await versionApi.DeleVersion({
           folder_path: 'data/markdown/' + name,
         })
-        .then(() => {
-          ElMessage({
-            message: '刪除成功',
-            type: 'success',
-          })
+        ElMessage({
+          message: '刪除成功',
+          type: 'success',
         })
-      if (store.state.status.usedVersion == name) emit('reloadVersion')
-      else emit('reloadTree')
+        if (usedVersion.value === name) {
+          emit('reloadVersion')
+        } else {
+          emit('reloadTreeStruct')
+        }
+      } catch {
+        //pass
+      }
     }
 
     const addVersion = async () => {
       store.dispatch('panels/openDialog', { type: 'version', rename: '' })
     }
-
-    watch(usedVersion, (val) => {
-      ver.value = val
-    })
 
     onMounted(() => {
       // ShowBtns.value = router.currentRoute.value.meta.actions
@@ -117,14 +114,13 @@ export default defineComponent({
     return {
       ver,
       title,
-      name,
-      store,
       handleChange,
       addVersion,
       renameVersion,
       deleVersion,
       ShowBtns,
-      version,
+      versionList,
+      usedVersion,
     }
   },
 })
@@ -146,16 +142,54 @@ export default defineComponent({
       font-size: .8em
       color: #777
       font-weight: 600
-    :deep(.el-select)
-      width: 130px
-      .el-input__inner
-        height: 30px
+    :deep(.el-dropdown)
+      +size(150px,30px)
+      .el-button
+        font-size: 14px
+        +size(100%,30px)
         background: transparent
         border-color: #777
-      .el-input__suffix
-        top: -5px
-      .el-input__icon
-        line-height: inherit
-      .el-input__suffix-inner
-        display: inline-block
+        padding: 0 20px 0 5px
+        position: relative
+        i
+          position: absolute
+          top: 50%
+          right: 5px
+          transform: translateY(-50%)
+</style>
+<style lang="sass">
+.el-dropdown-menu__item
+  display: flex
+  justify-content: space-between
+  padding: 0 0 0 20px
+  .el-button
+    width: calc(100% - 20px)
+    margin-right: 20px
+    margin-top: 5px
+  &:hover
+    background-color: #f5f7fa !important
+  &.is-disabled
+    a
+      cursor: not-allowed
+  a
+    flex: 1
+  .btns
+    margin-left: .8rem
+    display: flex
+    align-items: center
+    i
+      padding: 2px
+      border-radius: 5px
+      cursor: pointer
+      &:hover
+        color: #fff !important
+      &.el-icon-edit
+        color: #909399
+        margin-right: .5em
+        &:hover
+          background-color: #686868
+      &.el-icon-delete
+        color: #F56C6C
+        &:hover
+          background-color: #F56C6C
 </style>
