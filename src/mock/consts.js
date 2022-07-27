@@ -1,4 +1,7 @@
-export const IMG_PATH = '/mdapi/api/markdown/file/path/?file_path='
+const localHref = location.origin
+
+export const IMG_PATH = localHref + '/mdapi/api/markdown/file/path/?file_path='
+
 export const NO_FILE_CONTENT =
   "::: warning\n *此目錄找無檔案*  :confounded:\n *Can't find the  file in this floder.* \n :::"
 

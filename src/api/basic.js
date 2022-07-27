@@ -10,9 +10,6 @@ export default {
       url: `/mdapi/api/markdown/file/img/?rewrite=${rewrite}`,
       method: 'post',
       data,
-      // header: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
     })
   },
   GetVersion() {

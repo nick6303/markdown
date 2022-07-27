@@ -3,7 +3,7 @@ import store from '@/store'
 import mdapi from '@api/file'
 import usePDF from './usePDF'
 import treeHelper from './treeHelper'
-import { NO_FILE_CONTENT } from '@mock/consts'
+import { NO_FILE_CONTENT, IMG_PATH } from '@mock/consts'
 
 export { usePDF }
 export { treeHelper }
@@ -113,7 +113,7 @@ export const storeRencntInfo = async (select) => {
 
 //Img加/刪網址
 export const ImgProcessor = (str, mode) => {
-  const http = store.state.status.ImgURl
+  const http = IMG_PATH
   // const regex = /^!\[(.*)\]\((.*)\)$/mg
   const regex = /^!\[(.*)\]\((.*)\)/gm
   let ans = str

@@ -30,6 +30,7 @@ import { ElMessage } from 'element-plus'
 import { useStore } from 'vuex'
 import { compare } from '@/utils/hooks'
 import VMdEditor from '@c/VMdEditor/VMdEditor'
+import { IMG_PATH } from '@/mock/consts'
 
 export default defineComponent({
   name: 'Previewer',
@@ -215,7 +216,7 @@ export default defineComponent({
             form.append('rewrite', formData.rewrite)
 
             var res = await basicapi.UploadImg(form)
-            var fullPath = store.state.status.ImgURl + res.filepath
+            var fullPath = IMG_PATH + res.filepath
             insertImage({
               url: fullPath,
               desc: '圖片',

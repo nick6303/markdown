@@ -3,7 +3,7 @@
   #left
     Version(
       @reloadTree="reloadTreeStruct(true)"
-      @reloadVersion="storeVersion()"
+      @reloadVersion="storeVersion"
     )
     Tree(
       @reload="reload"
@@ -64,7 +64,7 @@ export default defineComponent({
     const siblins = ref([])
     const { getCatlog } = treeHelper()
 
-    const reloadTreeStruct = async (versionReload) => {
+    const reloadTreeStruct = async (versionReload = false) => {
       //initial
       store.commit('loading/setTreeLoad', true)
       await basicapi.initFile()
@@ -104,11 +104,12 @@ export default defineComponent({
     }
 
     const storeVersion = async () => {
-      //2. Get Versions
       const res = await basicapi.GetVersion()
       const URLs = routerPath.value.split('/')
       const VersionURL = URLs[URLs.length - 1]
-      const index = res.findIndex((item) => item === VersionURL)
+      const index = res.findIndex(
+        (item) => item === decodeURIComponent(VersionURL)
+      )
       if (index !== -1) {
         const ver = res[index]
         store.commit('status/setVersion', ver)
@@ -135,8 +136,11 @@ export default defineComponent({
     }
 
     const reload = async ({ reloadtype, res, deleParent, findFirst }) => {
-      if (findFirst) await reloadTreeStruct(true)
-      else await reloadTreeStruct()
+      if (findFirst) {
+        await reloadTreeStruct(true)
+      } else {
+        await reloadTreeStruct()
+      }
 
       //檔案 新增/編輯、rename、刪除
       if (reloadtype == 'addFile') {
@@ -172,9 +176,9 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (store.state.initial.version.length == 0) byOrder() //文件相關載入
-      //網域相關設定
-      store.commit('status/setImgURL', window.location.origin)
+      if (store.state.initial.version.length === 0) {
+        byOrder() //文件相關載入
+      }
     })
 
     return {
