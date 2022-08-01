@@ -6,6 +6,7 @@
       @reloadVersion="storeVersion"
     )
     Tree(
+      :tree_load="tree_load"
       @reload="reload"
     )
   #right
@@ -62,13 +63,14 @@ export default defineComponent({
     const struct = ref([])
     const versions = ref([])
     const siblins = ref([])
+    const tree_load = ref(false)
     const { getCatlog } = treeHelper()
 
     const reloadTreeStruct = async (versionReload = false) => {
       //initial
-      store.commit('loading/setTreeLoad', true)
+      tree_load.value = true
       await basicapi.initFile()
-      store.commit('loading/setTreeLoad', false)
+      tree_load.value = false
       //get struct
       try {
         const res = await basicapi.GetStruct()
@@ -185,6 +187,7 @@ export default defineComponent({
       versions,
       reloadTreeStruct,
       storeVersion,
+      tree_load,
     }
   },
 })

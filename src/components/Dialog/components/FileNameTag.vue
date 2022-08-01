@@ -24,7 +24,7 @@ import { useStore } from 'vuex'
 import mdapi from '@api/file'
 
 export default defineComponent({
-  name: 'FilenameNTag',
+  name: 'FileNameTag',
   props: {
     loading: {
       type: Boolean,

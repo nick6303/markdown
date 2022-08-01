@@ -5,20 +5,16 @@ el-config-provider(:locale="locale")
 
 <script>
 import locale from 'element-plus/lib/locale/lang/zh-tw'
-// import router from '@/router'
+import router from '@/router'
 
 export default {
   name: 'App',
   components: {},
   setup() {
-    // const access_token = router.currentRoute.value.query.access_token
-    // const csrftoken = router.currentRoute.value.query.csrftoken
-    // if (access_token) {
-    //   localStorage.setItem('access_token', access_token)
-    // }
-    // if (csrftoken) {
-    //   localStorage.setItem('csrftoken', csrftoken)
-    // }
+    const access_token = router.currentRoute.value.query.access_token
+    if (access_token) {
+      localStorage.setItem('access_token', access_token)
+    }
     return { locale }
   },
 }

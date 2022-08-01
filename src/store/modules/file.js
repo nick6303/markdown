@@ -4,7 +4,6 @@ export const file = {
     recentFile: {},
     recentFolder: {},
     recentClick: {},
-    //
     editingFile: '',
     BreadCurmb: [],
   },

@@ -76,10 +76,12 @@ export default defineComponent({
     RenameFolder,
     NewFolder,
   },
+  props: {
+    tree_load: Boolean,
+  },
   emits: ['reload'],
   setup(props, { emit }) {
     const store = useStore()
-    const tree_load = computed(() => store.state.loading.tree_load)
     const TreeData = computed(() => store.state.initial.struct)
     const expendKey = ref([1])
     const open = ref(false)
@@ -256,7 +258,6 @@ export default defineComponent({
       dragEnter,
       dragNode,
       TreeData,
-      tree_load,
       getNodeClass,
       ShowBtns,
     }

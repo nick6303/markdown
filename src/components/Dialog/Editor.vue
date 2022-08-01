@@ -9,7 +9,7 @@
     @closed="handleClosed"
   )
     template(#title)
-      FilenameNTag(
+      FileNameTag(
         :loading="statusLoading"
         :run="runRename"
         @renameOver="runRename = false"
@@ -77,7 +77,7 @@ import mdapi from '@api/file'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ImgProcessor, DirObj } from '@/utils/hooks'
 
-import FilenameNTag from './components/FilenameNTag.vue'
+import FileNameTag from './components/FileNameTag.vue'
 import Helper from './components/Helper.vue'
 import AdvanceOptions from './components/AdvanceOptions.vue'
 
@@ -86,7 +86,7 @@ import Previewer from '@c/Previewer'
 export default defineComponent({
   name: 'DialogEditor',
   components: {
-    FilenameNTag,
+    FileNameTag,
     Previewer,
     Helper,
     AdvanceOptions,
