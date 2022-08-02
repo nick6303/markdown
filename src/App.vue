@@ -15,7 +15,6 @@ export default {
     if (access_token) {
       localStorage.setItem('access_token', access_token)
     }
-
     return { locale }
   },
 }
