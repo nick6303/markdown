@@ -2,10 +2,14 @@
 #MarkDown
   #left
     Version(
+      :versionList="versionList"
+      :webTitle="webTitle"
       @reloadTreeStruct="reloadTreeStruct(true)"
       @reloadVersion="storeVersion"
     )
     Tree(
+      :TreeData="TreeData"
+      :tree_load="tree_load"
       @reload="reload"
     )
   #right
@@ -26,7 +30,7 @@
 <script>
 import { useStore } from 'vuex'
 import basicapi from '@api/basic'
-import { defineComponent, onMounted, ref, computed, watch } from 'vue'
+import { defineComponent, onMounted, ref, computed, watch, reactive } from 'vue'
 import {
   findFirstMd,
   readMd,
@@ -59,32 +63,34 @@ export default defineComponent({
     const store = useStore()
     const routerPath = computed(() => router.currentRoute.value.path)
     const run = ref(false)
-    const struct = ref([])
-    const versions = ref([])
+    const TreeData = ref([])
+    const versionList = ref([])
     const siblins = ref([])
+    const tree_load = ref(false)
+    const webTitle = reactive({
+      Name: '',
+      Tile: '',
+    })
     const { getCatlog } = treeHelper()
 
     const reloadTreeStruct = async (versionReload = false) => {
       //initial
-      store.commit('loading/setTreeLoad', true)
+      tree_load.value = true
       await basicapi.initFile()
-      store.commit('loading/setTreeLoad', false)
+      tree_load.value = false
       //get struct
       try {
         const res = await basicapi.GetStruct()
-        struct.value = [res]
-        await sortTree(struct.value)
+        TreeData.value = [res]
+        await sortTree(TreeData.value)
 
         //轉換成只有目錄的Obj->給表單使用
-        DirObj.value = getCatlog(struct.value)
+        DirObj.value = getCatlog(TreeData.value)
         if (versionReload) {
           //切換版本
-          versions.value = await basicapi.GetVersion()
-          store.commit('initial/setVersionList', versions.value)
-          findFirstMd(struct.value[0].children, struct.value[0].id)
+          versionList.value = await basicapi.GetVersion()
+          findFirstMd(TreeData.value[0].children, TreeData.value[0].id)
         }
-        // struct.value = struct.value[0].children //根目錄不顯示在tree
-        store.commit('initial/setStruct', struct.value) //
         return true
       } catch {
         return false
@@ -105,7 +111,7 @@ export default defineComponent({
 
     const storeVersion = async () => {
       const res = await basicapi.GetVersion()
-      store.commit('initial/setVersionList', res) //
+      versionList.value = res
       const URLs = routerPath.value.split('/')
       const VersionURL = URLs[URLs.length - 1]
       const index = res.findIndex(
@@ -118,14 +124,15 @@ export default defineComponent({
         store.commit('status/setVersion', res[0])
       }
       await reloadTreeStruct()
-      findFirstMd(struct.value[0].children, struct.value[0].id)
+      findFirstMd(TreeData.value[0].children, TreeData.value[0].id)
     }
 
     const byOrder = async () => {
       try {
         const res = await basicapi.GetTitle(1)
         const title = res.title ?? ''
-        store.commit('initial/setTitle', title) //
+        webTitle.Name = title.Name
+        webTitle.Tile = title.Tile
         storeVersion()
       } catch {
         //
@@ -151,7 +158,7 @@ export default defineComponent({
         await storeRencntInfo(res) //存入資訊
         readMd(res.id)
       } else if (reloadtype == 'deleFile') {
-        let obj = JSON.parse(JSON.stringify(struct.value))
+        let obj = JSON.parse(JSON.stringify(TreeData.value))
         await findSiblin(obj, deleParent)
         await findFirstMd(siblins.value.children)
       }
@@ -181,10 +188,12 @@ export default defineComponent({
       store,
       reload,
       run,
-      struct,
-      versions,
+      TreeData,
       reloadTreeStruct,
       storeVersion,
+      tree_load,
+      webTitle,
+      versionList,
     }
   },
 })

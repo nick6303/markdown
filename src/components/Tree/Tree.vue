@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed, onMounted } from 'vue'
+import { defineComponent, ref, watch, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import folderapi from '@api/folder'
 import { readMd, storeRencntInfo } from '@/utils/hooks'
@@ -76,11 +76,13 @@ export default defineComponent({
     RenameFolder,
     NewFolder,
   },
+  props: {
+    tree_load: Boolean,
+    TreeData: Array,
+  },
   emits: ['reload'],
   setup(props, { emit }) {
     const store = useStore()
-    const tree_load = computed(() => store.state.loading.tree_load)
-    const TreeData = computed(() => store.state.initial.struct)
     const expendKey = ref([1])
     const open = ref(false)
     const list = ref([])
@@ -255,8 +257,6 @@ export default defineComponent({
       openRenameFolder,
       dragEnter,
       dragNode,
-      TreeData,
-      tree_load,
       getNodeClass,
       ShowBtns,
     }

@@ -4,7 +4,6 @@ import { loading } from './modules/loading'
 import { advance } from './modules/advance'
 import { panels } from './modules/panels'
 import { file } from './modules/file'
-import { initial } from './modules/initial'
 export default createStore({
   state: {},
   mutations: {},
@@ -15,6 +14,5 @@ export default createStore({
     file,
     panels,
     advance,
-    initial,
   },
 })

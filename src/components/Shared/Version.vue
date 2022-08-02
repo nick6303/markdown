@@ -1,8 +1,8 @@
 <template lang="pug">
 #Version 
-  .top {{title.Name}}
+  .top {{webTitle.Name}}
   .bottom
-    span.name {{title.Tile}}
+    span.name {{webTitle.Tile}}
     el-dropdown(
       trigger="click"
     )
@@ -49,11 +49,13 @@ export default defineComponent({
   components: {
     NewAndRenameVersion,
   },
+  props: {
+    webTitle: Object,
+    versionList: Array,
+  },
   emits: ['reloadTreeStruct', 'reloadVersion'],
   setup(props, { emit }) {
     const store = useStore()
-    const versionList = computed(() => store.state.initial.versionList)
-    const title = computed(() => store.state.initial.title)
     const usedVersion = computed(() => store.state.status.usedVersion)
     const ver = ref(usedVersion.value)
     const ShowBtns = ref({})
@@ -113,13 +115,11 @@ export default defineComponent({
 
     return {
       ver,
-      title,
       handleChange,
       addVersion,
       renameVersion,
       deleVersion,
       ShowBtns,
-      versionList,
       usedVersion,
     }
   },
