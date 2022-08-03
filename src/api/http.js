@@ -11,18 +11,18 @@ axios.defaults.withCredentials = true
 
 http.interceptors.request.use(
   (config) => {
-    // const access_token = localStorage.getItem('access_token')
-    // const csrftoken = localStorage.getItem('csrftoken')
-    // if (
-    //   access_token &&
-    //   access_token !== '' &&
-    //   !config.headers.withOutAuthorization
-    // ) {
-    //   config.headers['Authorization'] = 'Basic ' + access_token
-    // }
-    // if (csrftoken && csrftoken !== '') {
-    //   config.headers['x-csrftoken'] = csrftoken
-    // }
+    const access_token = localStorage.getItem('access_token')
+    const csrftoken = localStorage.getItem('csrftoken')
+    if (
+      access_token &&
+      access_token !== '' &&
+      !config.headers.withOutAuthorization
+    ) {
+      config.headers['Authorization'] = 'Basic ' + access_token
+    }
+    if (csrftoken && csrftoken !== '') {
+      config.headers['x-csrftoken'] = csrftoken
+    }
     return config
   },
   (error) => {
