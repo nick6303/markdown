@@ -5,6 +5,7 @@
     title="本檔案設定"
     trigger="click"
     popper-class="md-advance-pop"
+    :width="320"
   )
     template(#reference)
       el-button(type="info" icon="el-icon-setting" circle  size="small" )  
@@ -95,8 +96,11 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass" scoped>
-#AdvanceOptions
+<style lang="sass">
+.md-advance-pop
+  .el-popover__title
+    width: 100%
+    text-align: center
   .switch
     margin: 1rem .5rem
     .key

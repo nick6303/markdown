@@ -1,6 +1,6 @@
 <template lang="pug">
 #Basic
-  .wrapper          
+  .wrapper
     .topic
       .title
         i.el-icon-location 

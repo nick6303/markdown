@@ -226,7 +226,7 @@ export default defineComponent({
       width: 100%
       align-items: center
       position: relative
-    :deep(#Previewer)
+    :deep(.Previewer)
       height: calc(100% - 55px)
   /*捲軸*/
   ::-webkit-scrollbar //背景顏色

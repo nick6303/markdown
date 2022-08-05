@@ -1,5 +1,5 @@
 <template lang="pug">
-#Previewer(
+.Previewer(
   v-loading="view_load"
   @click="outer(1, $event)" 
   @mouseover="mouseover(1, $event)"
@@ -18,7 +18,6 @@
   @click="outer(2, $event)" 
   @mouseover="mouseover(2, $event)"
 )
-  i.el-icon-close(@click="closeImg") 
   img(:src="ImgPath")
 </template>
 
@@ -298,21 +297,25 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass" scoped>
-#Previewer
+<style lang="sass">
+@keyframes zoomIn
+  from
+    transform: scale(0.5)
+  to
+    transform: scale(1.5)
+.Previewer
   z-index: 5
-  height: 100%
-:deep(.vuepress-markdown-body)
-  background-color: #fff
-:deep(.v-md-editor)
-  background-color: #fff
-  border-radius: 0 4px 4px 4px
-  border: 1px solid rgb(237, 237, 237)
-  :deep(.caption)
-    color: red
-:deep(.v-md-editor-preview)
-  :deep(.caption)
-    color: red
+  .vuepress-markdown-body
+    background-color: #fff
+  .v-md-editor
+    background-color: #fff
+    border-radius: 0 4px 4px 4px
+    border: 1px solid rgb(237, 237, 237)
+    .caption
+      color: red
+  .v-md-editor-preview
+    .caption
+      color: red
 
 .imgWrapper
   width: 100vw
@@ -339,14 +342,6 @@ export default defineComponent({
   i:hover
     cursor: pointer
   img
-    max-width: 60%
-    max-height: 60%
-    animation: zoomIn .3s
-    transform: scale(1.5)
-    // margin: auto
-@keyframes zoomIn
-  from
-    transform: scale(0.5)
-  to
-    transform: scale(1.5)
+    // transform: scale(1.5)
+    animation: zoomIn .3s both
 </style>

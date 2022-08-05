@@ -3,6 +3,8 @@
   el-dialog(
     custom-class='md-editor-dialog'
     v-model="open"
+    width="93%"
+    top="3vh"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="noSave"
@@ -61,15 +63,12 @@
           size="small"  
           @click="noSave"
         ) 取消
-    
     Previewer(
       mode="editable" 
       :cancleEdit="cancleEdit" 
       @clearOver="cancleEdit = false"
     )
-
 </template>
-
 <script>
 import { defineComponent, watch, ref, onBeforeUnmount, computed } from 'vue'
 import { useStore } from 'vuex'
@@ -366,17 +365,16 @@ export default defineComponent({
   display: flex
   justify-content: space-between
   :deep(.md-editor-dialog)
-    margin-top: 3vh !important
-    width: 93% !important
-    height: 95% !important
-    margin: auto
+    height: calc(100% - 3vh - 50px)
     box-shadow: 0 0 8px 8px #0000004d
     .el-dialog__header
       display: flex
       justify-content: space-between
     .el-dialog__body
-      height: 90%
+      height: calc(100% - 62px)
       padding: .5rem 1rem
+      .Previewer
+        height: 100% !important
   .right
     margin-right: 2%
     display: flex
