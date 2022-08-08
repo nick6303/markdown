@@ -38,7 +38,6 @@
 <script>
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import NewAndRenameVersion from './components/NewAndRenameVersion.vue'
-// import router from '@router'
 import { useStore } from 'vuex'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import versionApi from '@api/version'
@@ -109,8 +108,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      // ShowBtns.value = router.currentRoute.value.meta.actions
-      ShowBtns.value = store.state.status.ShowBtns
+      ShowBtns.value = router.currentRoute.value.query.actions
     })
 
     return {

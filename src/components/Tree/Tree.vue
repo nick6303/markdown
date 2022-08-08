@@ -69,6 +69,7 @@ import folderapi from '@api/folder'
 import { readMd, storeRencntInfo } from '@/utils/hooks'
 import { useStore } from 'vuex'
 import { RenameFolder, NewFolder } from './components'
+import router from '@/router'
 
 export default defineComponent({
   name: 'Tree',
@@ -235,8 +236,7 @@ export default defineComponent({
     )
 
     onMounted(() => {
-      // ShowBtns.value = router.currentRoute.value.meta.actions
-      ShowBtns.value = store.state.status.ShowBtns
+      ShowBtns.value = router.currentRoute.value.query.actions
     })
 
     return {

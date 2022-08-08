@@ -3,11 +3,6 @@ export const status = {
   state: {
     content_status: '已儲存',
     usedVersion: '',
-    ShowBtns: {
-      update: true,
-      delete: true,
-      create: true,
-    },
   },
   mutations: {
     setStatus(state, NewStatus) {

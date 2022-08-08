@@ -6,12 +6,16 @@ el-config-provider(:locale="locale")
 <script>
 import locale from 'element-plus/lib/locale/lang/zh-tw'
 import router from '@/router'
+import { computed } from '@vue/runtime-core'
 
 export default {
   name: 'App',
   components: {},
   setup() {
-    const access_token = router.currentRoute.value.query.access_token
+    const access_token = computed(
+      () => router.currentRoute.value.query.access_token
+    )
+
     if (access_token) {
       localStorage.setItem('access_token', access_token)
     }

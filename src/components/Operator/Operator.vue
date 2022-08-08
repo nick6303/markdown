@@ -68,7 +68,7 @@ import { defineComponent, ref, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import mdapi from '@api/file'
 import { useStore } from 'vuex'
-// import router from '@router'
+import router from '@router'
 //comp
 import Editor from '@c/Dialog/Editor.vue'
 import AdvancedSettings from './components/AdvancedSettings.vue'
@@ -136,8 +136,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      // ShowBtns.value = router.currentRoute.value.meta.actions
-      ShowBtns.value = store.state.status.ShowBtns
+      ShowBtns.value = router.currentRoute.value.query.actions
     })
 
     return {
