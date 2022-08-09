@@ -64,7 +64,7 @@ Editor(
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import mdapi from '@api/file'
 import { useStore } from 'vuex'
@@ -82,7 +82,8 @@ export default defineComponent({
   emits: ['download', 'reload'],
   setup(props, { emit }) {
     const store = useStore()
-    const ShowBtns = ref({})
+    const ShowBtns = computed(() => router.currentRoute.value.meta.actions)
+
     const advance = ref(null)
     const ifMdExist = computed(() => store.state.file.BreadCurmb)
 
@@ -134,10 +135,6 @@ export default defineComponent({
     const openAdvance = () => {
       advance.value.openDialog()
     }
-
-    onMounted(() => {
-      ShowBtns.value = router.currentRoute.value.query.actions
-    })
 
     return {
       editor,

@@ -3,6 +3,9 @@ import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { refreshToken } from '@/utils'
 
+const isProduction = process.env.NODE_ENV === 'production'
+const resetPath = isProduction ? '/403' : '/login'
+
 const http = axios.create({
   baseURL: window.location.origin,
 })
@@ -83,7 +86,7 @@ http.interceptors.response.use(
         }
 
         localStorage.clear()
-        router.push({ path: '/login' })
+        router.push({ path: resetPath })
 
         if (isLiginPage) {
           errorMsg.message = '帳號/密碼輸入錯誤'
@@ -91,7 +94,7 @@ http.interceptors.response.use(
         break
       case 403:
         localStorage.clear()
-        router.push({ path: '/login' })
+        router.push({ path: resetPath })
         break
       case 429: // 429 too many request dont trigger error message
         errorMsg.duration = 0

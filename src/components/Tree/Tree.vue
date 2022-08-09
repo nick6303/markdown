@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, onMounted } from 'vue'
+import { defineComponent, ref, watch, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import folderapi from '@api/folder'
 import { readMd, storeRencntInfo } from '@/utils/hooks'
@@ -91,7 +91,7 @@ export default defineComponent({
     const currentKey = ref()
     const dragNode = ref(0)
     const draggable = ref(false)
-    const ShowBtns = ref({})
+    const ShowBtns = computed(() => router.currentRoute.value.meta.actions)
     const removeTable = ref({
       source_id: -1,
       destination_id: -1,
@@ -234,10 +234,6 @@ export default defineComponent({
         immediate: true,
       }
     )
-
-    onMounted(() => {
-      ShowBtns.value = router.currentRoute.value.query.actions
-    })
 
     return {
       addDir,

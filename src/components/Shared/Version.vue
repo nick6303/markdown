@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import NewAndRenameVersion from './components/NewAndRenameVersion.vue'
 import { useStore } from 'vuex'
 import { ElMessageBox, ElMessage } from 'element-plus'
@@ -57,8 +57,7 @@ export default defineComponent({
     const store = useStore()
     const usedVersion = computed(() => store.state.status.usedVersion)
     const ver = ref(usedVersion.value)
-    const ShowBtns = ref({})
-
+    const ShowBtns = computed(() => router.currentRoute.value.meta.actions)
     const handleChange = async (val) => {
       if (val) {
         router.push({ path: `/${val}` })
@@ -106,10 +105,6 @@ export default defineComponent({
     const addVersion = async () => {
       store.dispatch('panels/openDialog', { type: 'version', rename: '' })
     }
-
-    onMounted(() => {
-      ShowBtns.value = router.currentRoute.value.query.actions
-    })
 
     return {
       ver,

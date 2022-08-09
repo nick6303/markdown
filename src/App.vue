@@ -6,7 +6,7 @@ el-config-provider(:locale="locale")
 <script>
 import locale from 'element-plus/lib/locale/lang/zh-tw'
 import router from '@/router'
-import { computed } from '@vue/runtime-core'
+import { computed, onBeforeMount, watch } from '@vue/runtime-core'
 
 export default {
   name: 'App',
@@ -16,9 +16,20 @@ export default {
       () => router.currentRoute.value.query.access_token
     )
 
-    if (access_token) {
-      localStorage.setItem('access_token', access_token)
+    const setToken = (val) => {
+      if (val) {
+        localStorage.setItem('access_token', val)
+      }
     }
+
+    watch(access_token, (val) => {
+      setToken(val)
+    })
+
+    onBeforeMount(() => {
+      setToken(access_token.value)
+    })
+
     return { locale }
   },
 }

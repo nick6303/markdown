@@ -2,8 +2,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const Version = new Date().getTime()
 
 module.exports = {
-  publicPath: isProduction ? '/markdown/' : '/',
-  // publicPath: '/',
+  publicPath: isProduction ? '/mm/' : '/',
   devServer: {
     port: 8080,
     proxy: {
